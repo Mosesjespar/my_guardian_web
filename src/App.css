@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.link {
+  text-decoration: none;
+  text-decoration-line: none;
+  text-decoration-color: transparent;
+  color: transparent;
+}
+
+.round-container {
+  background-color: white;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+}
