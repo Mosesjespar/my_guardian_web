@@ -9,7 +9,8 @@
 }
 
 .round-container {
-  background-color: white;
+  background-color: #ededeb;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
+  overflow: auto;
 }

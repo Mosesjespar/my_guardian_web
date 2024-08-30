@@ -1,5 +1,6 @@
 export const routes = {
   home: "/",
-  login: "/login",
-  signup: "/signup",
+  login: "/auth/login",
+  signup: "/auth/signup",
+  otp: "/auth/otp_verification",
 };

@@ -33,9 +33,12 @@ const Text = (props) => {
     dividerColor,
     whiteColor,
     fieldColor,
-    textAlign,
     style,
     children,
+    centered,
+    leftAligned,
+    rightAligned,
+    inline,
   } = props;
 
   // Typography Bootstrap classes
@@ -86,6 +89,14 @@ const Text = (props) => {
     ? "fw-bolder"
     : "";
 
+  const alignmentClass = centered
+    ? "text-center"
+    : leftAligned
+    ? "text-start"
+    : rightAligned
+    ? "text-end"
+    : "";
+
   // Color styles using BaseColor
   const colorStyle = primaryColor
     ? { color: BaseColor.orangeColor }
@@ -105,9 +116,10 @@ const Text = (props) => {
     ? { color: BaseColor.fieldColor }
     : "";
 
-  const combinedClass = `${typographyClass} ${fontWeightClass} `;
+  const combinedClass = `${typographyClass} ${fontWeightClass} ${alignmentClass} ${
+    inline ? "d-inline" : ""
+  } m-0`;
   const combinedStyle = {
-    textAlign,
     ...colorStyle,
     fontFamily: "Montserrat, sans-serif",
     ...style,
@@ -122,6 +134,7 @@ const Text = (props) => {
 
 Text.propTypes = {
   header: PropTypes.bool,
+  inline: PropTypes.bool,
   title1: PropTypes.bool,
   title2: PropTypes.bool,
   title3: PropTypes.bool,
@@ -155,9 +168,16 @@ Text.propTypes = {
   textAlign: PropTypes.string,
   style: PropTypes.object,
   children: PropTypes.node,
+  centered: PropTypes.bool,
+  leftAligned: PropTypes.bool,
+  rightAligned: PropTypes.bool,
 };
 
 Text.defaultProps = {
+  centered: false,
+  leftAligned: true,
+  rightAligned: false,
+  inline: false,
   header: false,
   title1: false,
   title2: false,

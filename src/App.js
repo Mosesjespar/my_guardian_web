@@ -10,6 +10,7 @@ import LandingPage from "./pages/LandingPage";
 import SignIn from "./pages/auth/SignIn";
 import { routes } from "./navigation/routes";
 import SignUp from "./pages/auth/SignUp";
+import Otp from "./pages/auth/Otp";
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
           }
           <Route path={routes.login} element={<SignIn />} />
           <Route path={routes.signup} element={<SignUp />} />
+          <Route path={routes.otp} element={<Otp />} />
+
         </Routes>
 
         {2 === 3 && ( //not functional

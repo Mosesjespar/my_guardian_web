@@ -9,6 +9,7 @@ const BackGround = ({ children }) => {
           ...styles.imageBackground,
           backgroundImage: `url(${Images.background})`,
         }}
+        // className="container-fluid"
       >
         {children}
       </div>
@@ -26,7 +27,6 @@ const styles = {
     height: "100vh",
     width: "100vw",
     margin: 0,
-    overflow: "hidden",
     position: "fixed",
   },
 
@@ -38,6 +38,7 @@ const styles = {
     backgroundRepeat: "no-repeat",
     height: "100%", // Full height
     width: "100%", // Full width
+
   },
 };
 

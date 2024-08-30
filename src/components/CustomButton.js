@@ -7,7 +7,7 @@ const CustomButton = ({
   outlined = false,
   text = false,
   children,
-  rounded = false,
+  rounded = true,
   onClick = () => {},
   ...rest
 }) => {
