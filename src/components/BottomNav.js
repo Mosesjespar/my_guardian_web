@@ -11,9 +11,7 @@ export default function BottomNav() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    if (newValue === 0) navigate("/");
-    if (newValue === 1) navigate("/search");
-    if (newValue === 2) navigate("/profile");
+  
   };
 
   return (

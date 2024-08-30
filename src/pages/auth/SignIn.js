@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import React, { useState } from "react";
 import Text from "../../components/Text";
 import CustomButton from "../../components/CustomButton";
@@ -13,12 +13,13 @@ import { PHONE_LOGIN_ENDPOINT_PATH } from "../../api/EndpointRoutes";
 function SignIn() {
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState("");
-
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const doValidate = () => {
     if (isEmpty(phone)) {
-      throw TypeError("Please provide your Phone");
+      setError("Please provide your Phone");
+      return;
     }
 
     return true;
@@ -32,26 +33,26 @@ function SignIn() {
   };
 
   const doFirebaseLogin = async () => {
-    console.log(phone);
     try {
       if (doValidate()) {
+        setError("");
         setLoading(true);
         const serverResponse = await checkPhoneWithServer();
         console.log("Server Response " + JSON.stringify(serverResponse));
         setLoading(false);
-        if (serverResponse.status == "Success") {
+        if (serverResponse.status === "Success") {
           navigate(routes.otp, {
             state: { formattedNumber: `+${phone}` },
             replace: true,
           });
           console.log("DOne");
         } else {
-          console.error("Opps!", serverResponse?.message);
+          setError(serverResponse?.message);
         }
       }
     } catch (error) {
       setLoading(false);
-      console.error("Oops!", error?.message);
+      setError(error?.message);
     }
   };
 
@@ -83,9 +84,15 @@ function SignIn() {
 
           <Text medium>Welcome back, glad to see you</Text>
 
-          <PhoneNumberInput value={phone} onChange={(text) => setPhone(text)} />
+          <PhoneNumberInput
+            value={phone}
+            onChange={(text) => setPhone(text)}
+            error={error}
+          />
 
-          <CustomButton onClick={doFirebaseLogin}>Next</CustomButton>
+          <CustomButton onClick={doFirebaseLogin} loading={loading}>
+            Next
+          </CustomButton>
 
           <Stack direction={"row"} spacing={1} className="pb-5">
             <Text regular>Don't have a account?</Text>

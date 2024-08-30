@@ -1,26 +1,17 @@
 import React from "react";
-import { Box, TextField } from "@mui/material";
+import { Box, MenuItem, TextField } from "@mui/material";
 import Text from "./Text";
 
-const CustomDropDown = ({ label = "", placeholder = "", ...props }) => {
-  const currencies = [
-    {
-      value: "USD",
-      label: "$",
-    },
-    {
-      value: "EUR",
-      label: "€",
-    },
-    {
-      value: "BTC",
-      label: "฿",
-    },
-    {
-      value: "JPY",
-      label: "¥",
-    },
-  ];
+const CustomDropDown = ({
+  label = "",
+  placeholder = "",
+  data = [],
+  optionLabel = "value", // Default to "value" if not provided
+  value,
+  onChange,
+  error = "",
+  ...props
+}) => {
   return (
     <Box>
       <Text medium>{label}</Text>
@@ -42,12 +33,8 @@ const CustomDropDown = ({ label = "", placeholder = "", ...props }) => {
             {...props}
             fullWidth
             select
-            placeholder={placeholder}
-            slotProps={{
-              select: {
-                native: true,
-              },
-            }}
+            value={value} // Controlled value prop
+            onChange={onChange} // Controlled onChange prop
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
@@ -66,14 +53,18 @@ const CustomDropDown = ({ label = "", placeholder = "", ...props }) => {
               },
             }}
           >
-            {currencies.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
+            {data.map((option, i) => (
+              <MenuItem key={i} value={option[optionLabel]}>
+                {option[optionLabel]}{" "}
+              </MenuItem>
             ))}
           </TextField>
         </Box>
       </Box>
+
+      <Text primaryColor caption1>
+        {error}
+      </Text>
     </Box>
   );
 };

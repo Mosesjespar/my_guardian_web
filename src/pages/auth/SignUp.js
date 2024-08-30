@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BackGround from "../../components/BackGround";
 import Text from "../../components/Text";
 import { Box, Container, Stack } from "@mui/material";
@@ -11,9 +11,109 @@ import CustomButton from "../../components/CustomButton";
 import { Link, useNavigate } from "react-router-dom";
 import { routes } from "../../navigation/routes";
 import { MdOutlineEmail } from "react-icons/md";
+import { BaseApiService } from "../../api/BaseApiService";
+import {
+  REGISTRATION_ENDPOINT_PATH,
+  SUPPORTED_LAGUAGES_ENDPOINT_PATH,
+} from "../../api/EndpointRoutes";
+import { isEmpty, isValidEmail } from "../../utils/UtilityMethods";
 
 function SignUp() {
   const navigate = useNavigate();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [language, setLanguage] = useState("");
+  const [languages, setLanguages] = useState([]);
+  const [languageId, setLanguageId] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const [email, setEmail] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchLanguages = async () => {
+    try {
+      const response = await new BaseApiService(
+        SUPPORTED_LAGUAGES_ENDPOINT_PATH
+      ).getRequestWithJsonResponse({});
+      setLanguages(response.records);
+    } catch (error) {
+      console.error("Error", "Failed to fetch languages");
+    }
+  };
+
+  const doValidate = () => {
+    setErrors({});
+    let isValid = true;
+    if (isEmpty(firstName)) {
+      setErrors((e) => ({ ...e, firstName: "Please provide your first name" }));
+      isValid = false;
+    }
+    if (isEmpty(lastName)) {
+      setErrors((e) => ({ ...e, lastName: "Please provide your last name" }));
+      isValid = false;
+    }
+    if (isEmpty(phone)) {
+      setErrors((e) => ({ ...e, phone: "Please provide your phone number" }));
+
+      isValid = false;
+    }
+    if (!isValidEmail(email)) {
+      setErrors((e) => ({
+        ...e,
+        email: "Please provide a valid email address",
+      }));
+
+      isValid = false;
+    }
+    if (isEmpty(language)) {
+      setErrors((e) => ({
+        ...e,
+        language: "Please select a preferred language",
+      }));
+      isValid = false;
+    }
+
+    if (isValid === true) {
+      doRegister();
+    }
+  };
+
+  const doRegister = async () => {
+    try {
+      setLoading(true);
+      const payload = {
+        phoneNumber: "+" + phone,
+        lastName,
+        firstName,
+        languageId: languageId,
+        emailAddress: email,
+      };
+
+      const response = await new BaseApiService(
+        REGISTRATION_ENDPOINT_PATH
+      ).postRequestWithJsonResponse(payload);
+
+      console.log("Response: " + JSON.stringify(response));
+      setLoading(false);
+      if (response.status === "Success") {
+        navigate(routes.otp, {
+          state: { formattedNumber: `+${phone}` },
+          replace: true,
+        });
+      } else {
+        alert("Oops!", response?.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      alert("Oops!", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchLanguages();
+  }, []);
 
   return (
     <BackGround>
@@ -28,11 +128,17 @@ function SignUp() {
           <InputField
             label="First name"
             iconStart={<FaRegUser color={BaseColor.orangeColor} size={20} />}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            error={errors.firstName}
           />
 
           <InputField
             label="Last name"
             iconStart={<FaRegUser color={BaseColor.orangeColor} size={20} />}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            error={errors.lastName}
           />
 
           <InputField
@@ -40,11 +146,30 @@ function SignUp() {
             iconStart={
               <MdOutlineEmail color={BaseColor.orangeColor} size={20} />
             }
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            error={errors.email}
           />
 
-          <PhoneNumberInput />
+          <PhoneNumberInput
+            value={phone}
+            onChange={setPhone}
+            error={errors.phone}
+          />
 
-          <CustomDropDown label="Select preffered language" />
+          <CustomDropDown
+            label="Select Language of Use"
+            data={languages}
+            value={language}
+            onChange={(e) => {
+              setLanguage(e.target.value);
+              setLanguageId(
+                languages.find((l) => l?.value === e.target.value)?.id
+              );
+            }}
+            optionLabel={"value"}
+            error={errors.language}
+          />
 
           <Box>
             <Text inline>
@@ -61,10 +186,7 @@ function SignUp() {
             </Text>
           </Box>
 
-          <CustomButton
-            rounded
-            onClick={() => navigate(routes.otp, { replace: true })}
-          >
+          <CustomButton onClick={doValidate} loading={loading}>
             AGREE & CONTINUE
           </CustomButton>
 

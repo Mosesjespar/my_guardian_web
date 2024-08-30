@@ -2,7 +2,15 @@ import React from "react";
 import { Box, InputAdornment, TextField } from "@mui/material";
 import Text from "./Text";
 
-const InputField = ({ label = "", placeholder = "", iconStart, ...props }) => {
+const InputField = ({
+  label = "",
+  placeholder = "",
+  value,
+  onChange,
+  iconStart,
+  error = "",
+  ...props
+}) => {
   return (
     <Box>
       <Text medium>{label}</Text>
@@ -22,6 +30,8 @@ const InputField = ({ label = "", placeholder = "", iconStart, ...props }) => {
         >
           <TextField
             {...props}
+            value={value}
+            onChange={onChange}
             fullWidth
             placeholder={placeholder}
             slotProps={{
@@ -52,6 +62,10 @@ const InputField = ({ label = "", placeholder = "", iconStart, ...props }) => {
           />
         </Box>
       </Box>
+
+      <Text primaryColor caption1>
+        {error}
+      </Text>
     </Box>
   );
 };

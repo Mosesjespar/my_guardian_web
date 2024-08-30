@@ -11,15 +11,16 @@ import { FIREBASE_LOGIN_ENDPOINT_PATH } from "../../api/EndpointRoutes";
 import { UserSessionUtils } from "../../utils/UserSessionUtils";
 import { auth, signInWithPhoneNumber } from "../../firebaseConfig";
 import { RecaptchaVerifier } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { LOGIN, loginAction } from "../../actions";
 
 function Otp() {
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch();
+
   const location = useLocation();
   const { formattedNumber } = location.state || {};
 
-
-  
   const [otp, setOtp] = useState("");
   const [timer, setTimer] = useState(30);
   const [successLogin, setSuccessLogin] = useState(false);
@@ -32,7 +33,6 @@ function Otp() {
   const [confirmationResult, setConfirmationResult] = useState(null);
 
   const [loading, setLoading] = useState(false);
-
 
   const handleChange = (otp) => setOtp(otp);
 
@@ -63,7 +63,7 @@ function Otp() {
     }
   }
   useEffect(() => {
-    sendOtp(formattedNumber);
+    // sendOtp(formattedNumber);
   }, []);
 
   const verifyFirebaseCode = async () => {
@@ -111,7 +111,14 @@ function Otp() {
       });
   };
 
-  const handleClick = () => {};
+  const handleClick = async () => {
+    if (otp === "123456") {
+      //for tests
+      UserSessionUtils.setLoggedIn(true);
+      navigate(routes.dashboard, { replace: true });
+      dispatch(loginAction(true));
+    }
+  };
 
   useEffect(() => {
     timer > 0 && setTimeout(timeOutCallback, 1000);
@@ -128,7 +135,7 @@ function Otp() {
       <Container maxWidth={"xl"} className="pt-4 round-container h-100 mt-3">
         <Stack spacing={2}>
           <Text centered semibold>
-            We have sent a 4 digit code to your number{" "}
+            We have sent a 6 digit code to your number{" "}
             {formattedNumber.substring(0, 6).concat("XXXXXXXX")}
           </Text>
 
@@ -154,6 +161,16 @@ function Otp() {
             }}
           />
           <CustomButton onClick={handleClick}>Verify</CustomButton>
+
+          {timer >= 0 && (
+            <Text centered>Didn't recieve code? Resend in {timer}</Text>
+          )}
+
+          {timer <= 0 && (
+            <CustomButton onClick={() => onResendFirebaseOTP()} text>
+              Resend code
+            </CustomButton>
+          )}
         </Stack>
       </Container>
     </BackGround>

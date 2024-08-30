@@ -7,7 +7,7 @@ export class UserSessionUtils {
    *
    * @param bearerToken
    */
-  static async setValue(key, value) {
+  static setValue(key, value) {
     localStorage.setItem(key, value);
   }
 
@@ -16,7 +16,7 @@ export class UserSessionUtils {
    *
    * @param bearerToken
    */
-  static async getValue(key) {
+  static getValue(key) {
     return localStorage.getItem(key);
   }
   /**
@@ -24,7 +24,7 @@ export class UserSessionUtils {
    *
    * @returns
    */
-  static async getBearerToken() {
+  static getBearerToken() {
     const token = localStorage.getItem(StorageParams.ACCESS_TOKEN);
     return JSON.parse(token);
   }
@@ -34,13 +34,13 @@ export class UserSessionUtils {
    *
    * @returns
    */
-  static async getRefreshToken() {
+  static getRefreshToken() {
     return localStorage.getItem(StorageParams.REFRESH_TOKEN);
   }
   /**
    * This method is used to clear the localstorage and redirect the user to the login screen
    */
-  static async clearLocalStorageAndLogout(navigationContext) {
+  static clearLocalStorageAndLogout(navigationContext) {
     if (isNotEmpty(navigationContext)) {
       // remove all
       localStorage.clear();
@@ -52,7 +52,7 @@ export class UserSessionUtils {
    *
    * @param bearerToken
    */
-  static async setUserAuthToken(bearerToken) {
+  static setUserAuthToken(bearerToken) {
     localStorage.setItem(StorageParams.ACCESS_TOKEN, bearerToken);
   }
 
@@ -61,7 +61,7 @@ export class UserSessionUtils {
    *
    * @param bearerToken
    */
-  static async setFullSessionObject(fullObject) {
+  static setFullSessionObject(fullObject) {
     localStorage.setItem(
       StorageParams.FULL_LOGIN_DETAILS_JSON,
       JSON.stringify(fullObject)
@@ -73,21 +73,21 @@ export class UserSessionUtils {
    *
    * @param bearerToken
    */
-  static async getFullSessionObject() {
+  static getFullSessionObject() {
     const value = localStorage.getItem(StorageParams.FULL_LOGIN_DETAILS_JSON);
     return JSON.parse(value);
   }
   /**
    * This method is used to get the stored expo device Id.
    */
-  static async getDeviceId() {
+  static getDeviceId() {
     return localStorage.getItem(StorageParams.EXPO_DEVICE_ID);
   }
 
   /**
    * This method is used to store the expo device Id.
    */
-  static async setDeviceId(token) {
+  static setDeviceId(token) {
     localStorage.setItem(StorageParams.EXPO_DEVICE_ID, token);
   }
   /**
@@ -95,7 +95,7 @@ export class UserSessionUtils {
    *
    * @param refreshToken
    */
-  static async setUserRefreshToken(refreshToken) {
+  static setUserRefreshToken(refreshToken) {
     localStorage.setItem(StorageParams.REFRESH_TOKEN, refreshToken);
   }
 
@@ -104,7 +104,7 @@ export class UserSessionUtils {
    *
    * @param userDetails
    */
-  static async setUserDetails(userDetails) {
+  static setUserDetails(userDetails) {
     localStorage.setItem(
       StorageParams.USER_DETAILS_JSON,
       JSON.stringify(userDetails)
@@ -115,7 +115,7 @@ export class UserSessionUtils {
    * This method is used to get a JSON object containing user details
    * @returns
    */
-  static async getUserDetails() {
+  static getUserDetails() {
     const value = localStorage.getItem(StorageParams.USER_DETAILS_JSON);
     return JSON.parse(value);
   }
@@ -124,25 +124,16 @@ export class UserSessionUtils {
    * This method is used to get user logged in status
    * @returns
    */
-  static async isLoggedIn() {
-    try {
-      localStorage.getItem(StorageParams.IS_LOGGED_IN).then((loggedIn) => {
-        console.log("Logged in plain value>>" + loggedIn);
-        if (loggedIn === true) {
-          return true;
-        }
-        return false;
-      });
-    } catch (error) {
-      return false;
-    }
+  static isLoggedIn() {
+    const bool = localStorage.getItem(StorageParams.IS_LOGGED_IN);
+    return bool === "true";
   }
 
   /**
    * This method is used to set user logged in status
    * @returns
    */
-  static async setLoggedIn(loggedIn) {
+  static setLoggedIn(loggedIn) {
     if (loggedIn) {
       localStorage.setItem(StorageParams.IS_LOGGED_IN, true);
     } else {
@@ -154,7 +145,7 @@ export class UserSessionUtils {
    * This method is used to get user logged in status
    * @returns
    */
-  static async acceptedTermsAndConditions() {
+  static acceptedTermsAndConditions() {
     try {
       localStorage
         .getItem(StorageParams.ACCEPTED_TERMS_AND_CONDITIONS)
@@ -170,7 +161,7 @@ export class UserSessionUtils {
    * This method is used to set user logged in status
    * @returns
    */
-  static async setAcceptedTermsAndConditions(accepted) {
+  static setAcceptedTermsAndConditions(accepted) {
     localStorage.setItem(
       StorageParams.ACCEPTED_TERMS_AND_CONDITIONS,
       accepted ? true : false
@@ -181,7 +172,7 @@ export class UserSessionUtils {
    * This method is used to set user txn pin
    * @param {*} pin
    */
-  static async setTxnPin(pin) {
+  static setTxnPin(pin) {
     localStorage.setItem(StorageParams.TXN_PIN, pin);
   }
 
@@ -189,7 +180,7 @@ export class UserSessionUtils {
    * This method is used to get user saved txn pin
    * @returns
    */
-  static async getTxnPin() {
+  static getTxnPin() {
     const value = localStorage.getItem(StorageParams.TXN_PIN);
     return value;
   }

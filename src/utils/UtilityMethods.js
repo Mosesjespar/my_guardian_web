@@ -14,3 +14,8 @@ export function isEmpty(anyValue) {
 export function isNotEmpty(anyValue) {
   return !isEmpty(anyValue);
 }
+
+export const isValidEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+};

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Text from "./Text";
 import PhoneInput from "react-phone-input-2";
 
-function PhoneNumberInput({ value, onChange, ...props }) {
+function PhoneNumberInput({ value, onChange, error = "", ...props }) {
   return (
     <Box>
       <Text medium>Phone Number</Text>
@@ -22,6 +22,7 @@ function PhoneNumberInput({ value, onChange, ...props }) {
           }}
         >
           <PhoneInput
+            {...props}
             country="ug"
             onlyCountries={["ug", "ke"]}
             placeholder="Enter phone number"
@@ -39,6 +40,10 @@ function PhoneNumberInput({ value, onChange, ...props }) {
           />
         </Box>
       </Box>
+
+      <Text primaryColor caption1>
+        {error}
+      </Text>
     </Box>
   );
 }

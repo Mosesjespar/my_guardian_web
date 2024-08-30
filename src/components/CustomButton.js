@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import BaseColor from "../config/BaseColor";
+import { CircularProgress, Box } from "@mui/material";
 
 const CustomButton = ({
   contained = true,
@@ -9,6 +10,7 @@ const CustomButton = ({
   children,
   rounded = true,
   onClick = () => {},
+  loading = false,
   ...rest
 }) => {
   const sxStyles = {
@@ -16,9 +18,12 @@ const CustomButton = ({
       padding: "8px 16px",
       fontSize: "14px",
       fontWeight: 500,
-      borderRadius: rounded ? "20px" : "4px", // Rounded or default border radius
-      fontFamily: "Montserrat, sans-serif", // Default or custom font family
+      borderRadius: rounded ? "20px" : "4px",
+      fontFamily: "Montserrat, sans-serif",
       textTransform: "none",
+      display: "flex", // Use flexbox to align content
+      alignItems: "center", // Vertically align items in the center
+      justifyContent: "center", // Center the content horizontally
     },
     contained: {
       backgroundColor: BaseColor.orangeColor,
@@ -35,7 +40,6 @@ const CustomButton = ({
         backgroundColor: "rgba(128, 0, 128, 0.1)",
       },
     },
-
     text: {
       backgroundColor: "transparent",
       color: BaseColor.orangeColor,
@@ -54,7 +58,16 @@ const CustomButton = ({
 
   return (
     <Button sx={appliedStyles} {...rest} onClick={onClick}>
-      {children}
+      {loading && (
+        <CircularProgress
+          size={20}
+          color={outlined ? BaseColor.orangeColor : "white"}
+          sx={{
+            marginRight: "8px", // Add space between spinner and text
+          }}
+        />
+      )}
+      <Box>{children}</Box>
     </Button>
   );
 };

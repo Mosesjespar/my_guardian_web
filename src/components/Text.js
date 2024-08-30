@@ -65,9 +65,7 @@ const Text = (props) => {
     : caption1
     ? "small"
     : caption2
-    ? "small text-muted"
-    : overline
-    ? "small text-uppercase"
+    ? "text-sm"
     : "";
 
   // Font weight Bootstrap classes
